@@ -62,7 +62,7 @@ sudo chown -R 1234:1234 ~/docker/isaac-sim
 ### Run with Docker Compose
 
 ```bash
-cd docker
+cd .docker
 docker compose up
 ```
 
