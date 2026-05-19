@@ -18,7 +18,7 @@ services:
       - ~/docker/isaac-sim/config:/isaac-sim/.nvidia-omniverse/config:rw
       - ~/docker/isaac-sim/data:/isaac-sim/.local/share/ov/data:rw
       - ~/docker/isaac-sim/pkg:/isaac-sim/.local/share/ov/pkg:rw
-      - ./isaac-sim-workspace:/isaac-sim/workspace:rw
+      - ./../isaac-sim-workspace:/isaac-sim/workspace:rw
     deploy:
       resources:
         reservations:
