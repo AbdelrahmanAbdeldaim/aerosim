@@ -82,7 +82,7 @@ examples folder. Available examples are:
 
 | Example | Description |
 | --- | --- |
-| `empty_scene_with_walls.py` | Starts Isaac Sim in GUI mode with an empty scene, ready for walls and other scene elements to be added. |
+| `empty_scene_with_walls.py` | Starts Isaac Sim in GUI mode and loads an empty walled environment (Pegasus "Box Room") containing a single PX4 quadrotor. The vehicle is controlled through MAVLink (PX4 SITL is launched automatically) and publishes its state, TF tree, and a monocular camera feed over ROS 2. |
 
 Run an example from the repository root:
 

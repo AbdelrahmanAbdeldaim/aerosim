@@ -14,7 +14,9 @@ from pegasus.simulator.logic.backends.px4_mavlink_backend import PX4MavlinkBacke
 from pegasus.simulator.logic.backends.ros2_backend import ROS2Backend
 from pegasus.simulator.logic.vehicles.multirotor import Multirotor, MultirotorConfig
 from pegasus.simulator.logic.interface.pegasus_interface import PegasusInterface
+from pegasus.simulator.logic.graphical_sensors.monocular_camera import MonocularCamera
 
+from rclpy.parameter import Parameter
 from scipy.spatial.transform import Rotation
 
 class EmptySceneWithWalls(Scenario):
@@ -52,13 +54,15 @@ class EmptySceneWithWalls(Scenario):
 
         ros2_bridge_config = {
             "namespace": 'drone',
-            "pub_sensors": True,
+            "pub_sensors": False,
             "pub_graphical_sensors": True,
             "pub_state": True,
-            "pub_tf": False,
+            "pub_tf": True,
             "sub_control": False
         }
         ros2_bridge_backend = ROS2Backend(vehicle_id=1, config=ros2_bridge_config)
+
+        config_multirotor.graphical_sensors = [MonocularCamera("camera", config={"update_rate": 60.0})]
 
         config_multirotor.backends = [mavlink_backend, ros2_bridge_backend]
 

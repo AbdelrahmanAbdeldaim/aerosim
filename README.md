@@ -23,4 +23,4 @@ The simulation environment uses the following stack:
   to PX4.
 
 See the [simulation setup guide](simulation/README.md) for installation,
-environment configuration, and standalone script usage.
+environment configuration, and simulation usage.
