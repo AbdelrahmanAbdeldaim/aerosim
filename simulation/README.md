@@ -28,8 +28,7 @@ git submodule update --init --recursive
 bash ./Tools/setup/ubuntu.sh
 ```
 
-Restart the computer after the setup script finishes, then build PX4 SITL for
-use with Pegasus:
+After installation is done, build PX4 SITL for use with Pegasus:
 
 ```bash
 cd ~/PX4-Autopilot
@@ -38,10 +37,6 @@ make px4_sitl_default none
 
 If the repository was cloned somewhere else, use that path instead and set the
 same PX4 path in the Pegasus configuration.
-
-Pegasus documents Isaac Sim 5.1 on Ubuntu 22.04 as its tested setup. Check the
-upstream compatibility notes before using a different Ubuntu, Isaac Sim, or PX4
-version.
 
 Confirm the configured Isaac Sim interpreter:
 
@@ -82,27 +77,18 @@ Verify the installation:
 
 ## Running a Simulation
 
-Run standalone scripts through the Isaac Sim interpreter wrapper from the
-repository root:
+Run standalone examples through the Isaac Sim interpreter wrapper from the
+examples folder. Available examples are:
+
+| Example | Description |
+| --- | --- |
+| `empty_scene_with_walls.py` | Starts Isaac Sim in GUI mode with an empty scene, ready for walls and other scene elements to be added. |
+
+Run an example from the repository root:
 
 ```bash
-isaac_run simulation/scripts/setup_stage.py
+isaac_run simulation/examples/empty_scene_with_walls.py
 ```
 
-The stage setup script lists the USD files in `simulation/stages/` and asks
-which stage to load.
-
-## Project Layout
-
-```text
-simulation/
-├── pyproject.toml          # Package metadata and build configuration
-├── scripts/                # Standalone Isaac Sim entry points
-├── src/
-│   └── drone_sim/          # Reusable simulation library
-└── stages/                 # USD stage assets
-```
-
-Use `scripts/` for executable workflows. Put reusable behavior in focused
-modules under `src/drone_sim/`. Keep USD assets in `stages/` instead of embedding asset paths in
-library code.
+Replace `empty_scene_with_walls.py` with the filename of the example you want
+to run.

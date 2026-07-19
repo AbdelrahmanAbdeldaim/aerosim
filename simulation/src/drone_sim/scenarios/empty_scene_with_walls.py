@@ -1,0 +1,96 @@
+#!/usr/bin/env python
+from drone_sim.scenarios import Scenario
+
+import carb
+import omni.timeline
+from omni.isaac.core.world import World
+
+from isaacsim.core.utils.extensions import enable_extension
+enable_extension("isaacsim.ros2.bridge")
+
+# Import the Pegasus API for simulating drones
+from pegasus.simulator.params import ROBOTS, SIMULATION_ENVIRONMENTS
+from pegasus.simulator.logic.backends.px4_mavlink_backend import PX4MavlinkBackend, PX4MavlinkBackendConfig
+from pegasus.simulator.logic.backends.ros2_backend import ROS2Backend
+from pegasus.simulator.logic.vehicles.multirotor import Multirotor, MultirotorConfig
+from pegasus.simulator.logic.interface.pegasus_interface import PegasusInterface
+
+from scipy.spatial.transform import Rotation
+
+class EmptySceneWithWalls(Scenario):
+    def __init__(self):
+        """
+        Method that initializes the PegasusApp and is used to setup the simulation environment.
+        """
+
+        # Acquire the timeline that will be used to start/stop the simulation
+        self.timeline = omni.timeline.get_timeline_interface()
+
+        # Start the Pegasus Interface
+        self.pg = PegasusInterface()
+
+        # Acquire the World, .i.e, the singleton that controls that is a one stop shop for setting up physics,
+        # spawning asset primitives, etc.
+        self.pg._world = World(**self.pg._world_settings)
+        self.world = self.pg.world
+
+        # Launch one of the worlds provided by NVIDIA
+        self.pg.load_environment(SIMULATION_ENVIRONMENTS["Box Room"])
+
+        # Create the vehicle
+        # Try to spawn the selected robot in the world to the specified namespace
+        config_multirotor = MultirotorConfig()
+
+        # Create the Mavlink configuration for the multirotor
+        mavlink_config = PX4MavlinkBackendConfig({
+            "vehicle_id": 0,
+            "px4_autolaunch": True,
+            "px4_dir": self.pg.px4_path,
+            "px4_vehicle_model": self.pg.px4_default_airframe # CHANGE this line to 'iris' if using PX4 version bellow v1.14
+        })
+        mavlink_backend = PX4MavlinkBackend(mavlink_config)
+
+        ros2_bridge_config = {
+            "namespace": 'drone',
+            "pub_sensors": True,
+            "pub_graphical_sensors": True,
+            "pub_state": True,
+            "pub_tf": False,
+            "sub_control": False
+        }
+        ros2_bridge_backend = ROS2Backend(vehicle_id=1, config=ros2_bridge_config)
+
+        config_multirotor.backends = [mavlink_backend, ros2_bridge_backend]
+
+        Multirotor(
+            "/World/quadrotor",
+            ROBOTS['Pegasus'],
+            0,
+            [0.0, 0.0, 0.07],
+            Rotation.from_euler("XYZ", [0.0, 0.0, 0.0], degrees=True).as_quat(),
+            config=config_multirotor,
+        )
+
+        # Reset the simulation environment so that all articulations (aka robots) are initialized
+        self.world.reset()
+
+        # Auxiliar variable for the timeline callback example
+        self.stop_sim = False
+
+    def run(self, simulation_app):
+        """
+        Method that implements the application main loop, where the physics steps are executed.
+        """
+
+        # Start the simulation
+        self.timeline.play()
+
+        # The "infinite" loop
+        while simulation_app.is_running() and not self.stop_sim:
+
+            # Update the UI of the app and perform the physics step
+            self.world.step(render=True)
+
+        # Cleanup and stop
+        carb.log_warn("EmptySceneWithWalls scenario is closing.")
+        self.timeline.stop()
