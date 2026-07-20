@@ -80,9 +80,20 @@ Verify the installation:
 Run standalone examples through the Isaac Sim interpreter wrapper from the
 examples folder. Available examples are:
 
-| Example | Description |
-| --- | --- |
-| `empty_scene_with_walls.py` | Starts Isaac Sim in GUI mode and loads an empty walled environment (Pegasus "Box Room") containing a single PX4 quadrotor. The vehicle is controlled through MAVLink (PX4 SITL is launched automatically) and publishes its state, TF tree, and a monocular camera feed over ROS 2. |
+<table border="1" cellpadding="6" cellspacing="0">
+  <thead>
+    <tr>
+      <th>Example</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>empty_scene_with_walls.py</code></td>
+      <td>Starts Isaac Sim in GUI mode and loads<br>an empty walled environment (Pegasus "Box Room")<br>containing a single PX4 quadrotor.
+    </tr>
+  </tbody>
+</table>
 
 Run an example from the repository root:
 

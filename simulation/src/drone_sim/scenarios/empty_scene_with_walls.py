@@ -19,7 +19,9 @@ from pegasus.simulator.logic.graphical_sensors.monocular_camera import Monocular
 
 from rclpy.parameter import Parameter
 from scipy.spatial.transform import Rotation
+import numpy as np
 
+from drone_sim.ros2_utils.omni_utils import setup_ros2_clock_graph
 class EmptySceneWithWalls(Scenario):
     def __init__(self):
         """
@@ -64,7 +66,8 @@ class EmptySceneWithWalls(Scenario):
         ros2_bridge_backend = ROS2Backend(vehicle_id=1, config=ros2_bridge_config)
         ros2_bridge_backend.node.set_parameters([Parameter("use_sim_time", Parameter.Type.BOOL, True)])
 
-        config_multirotor.graphical_sensors = [MonocularCamera("camera", config={"update_rate": 60.0})]
+        config_multirotor.graphical_sensors = [MonocularCamera("camera", config={"frequency": 60.0,
+                                                                                 "position": np.array([0.30, 0.0, 0.0])})]
 
         config_multirotor.backends = [mavlink_backend, ros2_bridge_backend]
 
@@ -80,38 +83,10 @@ class EmptySceneWithWalls(Scenario):
         # Reset the simulation environment so that all articulations (aka robots) are initialized
         self.world.reset()
 
-        self._setup_ros2_clock_graph()
+        setup_ros2_clock_graph()
 
         # Auxiliar variable for the timeline callback example
         self.stop_sim = False
-
-    def _setup_ros2_clock_graph(self):
-        """
-        Method that creates an OmniGraph that publishes the simulation time to the
-        ROS2 /clock topic on every physics step.
-        """
-
-        graph_settings = {
-            "graph_path": "/World/ROS2ClockGraph",
-            "evaluator_name": "execution",
-            "pipeline_stage": og.GraphPipelineStage.GRAPH_PIPELINE_STAGE_ONDEMAND,
-        }
-
-        keys = og.Controller.Keys
-        og.Controller.edit(
-            graph_settings,
-            {
-                keys.CREATE_NODES: [
-                    ("OnPhysicsStep", "isaacsim.core.nodes.OnPhysicsStep"),
-                    ("ReadSimTime", "isaacsim.core.nodes.IsaacReadSimulationTime"),
-                    ("PublishClock", "isaacsim.ros2.bridge.ROS2PublishClock"),
-                ],
-                keys.CONNECT: [
-                    ("OnPhysicsStep.outputs:step", "PublishClock.inputs:execIn"),
-                    ("ReadSimTime.outputs:simulationTime", "PublishClock.inputs:timeStamp"),
-                ],
-            },
-        )
 
     def run(self, simulation_app):
         """
