@@ -2,6 +2,7 @@
 from drone_sim.scenarios import Scenario
 
 import carb
+import omni.graph.core as og
 import omni.timeline
 from omni.isaac.core.world import World
 
@@ -61,6 +62,7 @@ class EmptySceneWithWalls(Scenario):
             "sub_control": False
         }
         ros2_bridge_backend = ROS2Backend(vehicle_id=1, config=ros2_bridge_config)
+        ros2_bridge_backend.node.set_parameters([Parameter("use_sim_time", Parameter.Type.BOOL, True)])
 
         config_multirotor.graphical_sensors = [MonocularCamera("camera", config={"update_rate": 60.0})]
 
@@ -78,8 +80,38 @@ class EmptySceneWithWalls(Scenario):
         # Reset the simulation environment so that all articulations (aka robots) are initialized
         self.world.reset()
 
+        self._setup_ros2_clock_graph()
+
         # Auxiliar variable for the timeline callback example
         self.stop_sim = False
+
+    def _setup_ros2_clock_graph(self):
+        """
+        Method that creates an OmniGraph that publishes the simulation time to the
+        ROS2 /clock topic on every physics step.
+        """
+
+        graph_settings = {
+            "graph_path": "/World/ROS2ClockGraph",
+            "evaluator_name": "execution",
+            "pipeline_stage": og.GraphPipelineStage.GRAPH_PIPELINE_STAGE_ONDEMAND,
+        }
+
+        keys = og.Controller.Keys
+        og.Controller.edit(
+            graph_settings,
+            {
+                keys.CREATE_NODES: [
+                    ("OnPhysicsStep", "isaacsim.core.nodes.OnPhysicsStep"),
+                    ("ReadSimTime", "isaacsim.core.nodes.IsaacReadSimulationTime"),
+                    ("PublishClock", "isaacsim.ros2.bridge.ROS2PublishClock"),
+                ],
+                keys.CONNECT: [
+                    ("OnPhysicsStep.outputs:step", "PublishClock.inputs:execIn"),
+                    ("ReadSimTime.outputs:simulationTime", "PublishClock.inputs:timeStamp"),
+                ],
+            },
+        )
 
     def run(self, simulation_app):
         """
