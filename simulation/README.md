@@ -12,15 +12,24 @@ The Python distribution and import names are intentionally different:
 
 ## Prerequisites
 
+Complete the following steps in order. Each one links to the upstream guide;
+the notes summarize what to do and call out project-specific settings.
+
 1. [Install NVIDIA Isaac Sim 5.1](https://docs.isaacsim.omniverse.nvidia.com/5.1.0/installation/install_workstation.html) using NVIDIA's official workstation installation guide. Download and extract the Linux archive, run `./post_install.sh`, and verify the installation using `./isaac-sim.selector.sh`.
 2. [Configure the environment variables](https://pegasussimulator.github.io/PegasusSimulator/source/setup/installation.html#configuring-the-environment-variables). Add `ISAACSIM_PATH`, `ISAACSIM_PYTHON`, `ISAACSIM`, and the `isaac_run` function to your shell configuration, then open a new terminal.
 3. [Install Pegasus Simulator](https://pegasussimulator.github.io/PegasusSimulator/source/setup/installation.html#installing-the-pegasus-simulator). Clone Pegasus, register its `extensions/` directory in Isaac Sim, enable the extension, and install `pegasus.simulator` with Isaac Sim's Python interpreter.
-4. Install PX4 Autopilot v1.17 for software-in-the-loop flight control using the instructions below, then configure Pegasus with the PX4 repository path.
+4. Install PX4 Autopilot v1.17 for software-in-the-loop flight control (see below).
+5. Register the PX4 repository path with Pegasus (see below).
 
-Install the PX4 build dependencies and clone the v1.17 release:
+### Install PX4 Autopilot v1.17
+
+Install the PX4 build dependencies and clone the v1.17 release. These commands
+clone into your home directory; if you use a different location, remember it for
+the Pegasus configuration step.
 
 ```bash
 sudo apt install git make cmake python3-pip
+cd ~
 git clone https://github.com/PX4/PX4-Autopilot.git
 cd PX4-Autopilot
 git checkout v1.17.0
@@ -35,8 +44,16 @@ cd ~/PX4-Autopilot
 make px4_sitl_default none
 ```
 
-If the repository was cloned somewhere else, use that path instead and set the
-same PX4 path in the Pegasus configuration.
+### Register the PX4 path with Pegasus
+
+Pegasus launches a PX4 software-in-the-loop instance to fly the drone, so it
+needs to know where the PX4 repository lives. The path defaults to
+`~/PX4-Autopilot`; update it only if you cloned PX4 somewhere else.
+
+Edit the `px4_dir` key in the Pegasus extension configuration file, located at
+`extensions/pegasus.simulator/config/configs.yaml` inside your Pegasus clone.
+
+## Verifying the Setup
 
 Confirm the configured Isaac Sim interpreter:
 
@@ -48,12 +65,6 @@ Confirm that the launcher can start Isaac Sim:
 
 ```bash
 isaac_run
-```
-
-Confirm that Pegasus is installed in Isaac Sim's Python environment:
-
-```bash
-"$ISAACSIM_PYTHON" -c "import pegasus.simulator; print(pegasus.simulator.__file__)"
 ```
 
 ## Installing This Project's Library
