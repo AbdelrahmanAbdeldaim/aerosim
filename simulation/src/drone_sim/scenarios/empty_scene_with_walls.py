@@ -68,7 +68,7 @@ class EmptySceneWithWalls(Scenario):
 
         config_multirotor.graphical_sensors = [MonocularCamera("camera", config={
                                                                 "frequency": 60.0,
-                                                                "position": np.array([0.30, 0.0, 0.10]),      # FLU, relative to body origin
+                                                                "position": np.array([0.14985, 0.0, -0.02963]),      # FLU, relative to body origin
                                                             })]
 
         config_multirotor.backends = [mavlink_backend, ros2_bridge_backend]
