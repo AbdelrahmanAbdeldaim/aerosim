@@ -66,8 +66,10 @@ class EmptySceneWithWalls(Scenario):
         ros2_bridge_backend = ROS2Backend(vehicle_id=1, config=ros2_bridge_config)
         ros2_bridge_backend.node.set_parameters([Parameter("use_sim_time", Parameter.Type.BOOL, True)])
 
-        config_multirotor.graphical_sensors = [MonocularCamera("camera", config={"frequency": 60.0,
-                                                                                 "position": np.array([0.30, 0.0, 0.0])})]
+        config_multirotor.graphical_sensors = [MonocularCamera("camera", config={
+                                                                "frequency": 60.0,
+                                                                "position": np.array([0.30, 0.0, 0.10]),      # FLU, relative to body origin
+                                                            })]
 
         config_multirotor.backends = [mavlink_backend, ros2_bridge_backend]
 
@@ -85,9 +87,6 @@ class EmptySceneWithWalls(Scenario):
 
         setup_ros2_clock_graph()
 
-        # Auxiliar variable for the timeline callback example
-        self.stop_sim = False
-
     def run(self, simulation_app):
         """
         Method that implements the application main loop, where the physics steps are executed.
@@ -97,7 +96,7 @@ class EmptySceneWithWalls(Scenario):
         self.timeline.play()
 
         # The "infinite" loop
-        while simulation_app.is_running() and not self.stop_sim:
+        while simulation_app.is_running():
 
             # Update the UI of the app and perform the physics step
             self.world.step(render=True)
