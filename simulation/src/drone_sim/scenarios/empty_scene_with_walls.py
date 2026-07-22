@@ -21,7 +21,7 @@ from rclpy.parameter import Parameter
 from scipy.spatial.transform import Rotation
 import numpy as np
 
-from drone_sim.ros2_utils.omni_utils import setup_ros2_clock_graph
+from drone_sim.utils.omni_utils import setup_ros2_clock_graph
 class EmptySceneWithWalls(Scenario):
     def __init__(self):
         """
