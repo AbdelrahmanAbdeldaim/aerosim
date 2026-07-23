@@ -22,6 +22,8 @@ from scipy.spatial.transform import Rotation
 import numpy as np
 
 from drone_sim.utils.omni_utils import setup_ros2_clock_graph
+from drone_sim.utils.ros2_utils import publish_static_tf
+
 class EmptySceneWithWalls(Scenario):
     def __init__(self):
         """
@@ -55,16 +57,18 @@ class EmptySceneWithWalls(Scenario):
         })
         mavlink_backend = PX4MavlinkBackend(mavlink_config)
 
+        setup_ros2_clock_graph()
         ros2_bridge_config = {
-            "namespace": 'drone',
-            "pub_sensors": False,
-            "pub_graphical_sensors": True,
-            "pub_state": True,
-            "pub_tf": True,
-            "sub_control": False
-        }
-        ros2_bridge_backend = ROS2Backend(vehicle_id=1, config=ros2_bridge_config)
+                    "namespace": 'drone',
+                    "pub_sensors": False,
+                    "pub_graphical_sensors": True,
+                    "pub_state": True,
+                    "pub_tf": True,
+                    "sub_control": False
+                }
+        ros2_bridge_backend = ROS2Backend(vehicle_id=2, config=ros2_bridge_config)
         ros2_bridge_backend.node.set_parameters([Parameter("use_sim_time", Parameter.Type.BOOL, True)])
+
 
         config_multirotor.graphical_sensors = [MonocularCamera("camera", config={
                                                                 "frequency": 60.0,
@@ -82,10 +86,10 @@ class EmptySceneWithWalls(Scenario):
             config=config_multirotor,
         )
 
-        # Reset the simulation environment so that all articulations (aka robots) are initialized
-        self.world.reset()
+        # TODO: This is a very manual way of publishing the static transform between the drone base_link and the camera. I should implement a more generic way of doing this in the ROS2 backend.
+        publish_static_tf(ros2_bridge_backend.node, ros2_bridge_backend.tf_static_broadcaster, "drone_base_link", "camera_01", np.array([0.14985, 0.0, -0.02963]), np.array([0.0, 0.0, 180.0]))
 
-        setup_ros2_clock_graph()
+        self.world.reset()
 
     def run(self, simulation_app):
         """
