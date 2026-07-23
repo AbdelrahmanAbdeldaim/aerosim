@@ -66,7 +66,7 @@ class EmptySceneWithWalls(Scenario):
                     "pub_tf": True,
                     "sub_control": False
                 }
-        ros2_bridge_backend = ROS2Backend(vehicle_id=2, config=ros2_bridge_config)
+        ros2_bridge_backend = ROS2Backend(vehicle_id=1, config=ros2_bridge_config)
         ros2_bridge_backend.node.set_parameters([Parameter("use_sim_time", Parameter.Type.BOOL, True)])
 
 
