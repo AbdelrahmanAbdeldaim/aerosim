@@ -1,8 +1,26 @@
 # Drone Navstack
-Drone Navstack is my first initiative to build a project in public, with the ultimate goal of developing an autonomous drone.
+
+Drone Navstack is my first initiative to build a project in public, with the ultimate goal of developing an autonomous physical drone.
 
 Prior to deploying on physical hardware, the strategy is to establish a simulation environment for rigorous testing. The architecture will utilize PX4 to handle low-level flight control and a custom ROS 2 stack to manage high-level autonomous commands.
 
-This project allows me to leverage my experience in mobile ground robotics and adapt it to aerial autonomy. The initial phases focus on mapping out the core requirements needed to develop a fully or semi-autonomous 3D flight stack. An early milestone includes integrating camera perception to enable vision-based flight control, such as commanding the drone to trace shapes based on detected hand gestures.
+## 🗺️ Roadmap & Milestones
 
-The final objective is to deliver a realistic simulation environment with robustly tested code, including building a custom communication bridge between PX4 and ROS 2. By mirroring these real-world integration steps in simulation, the eventual transition to physical hardware will be significantly streamlined.
+[![GitHub Project](https://img.shields.io/badge/GitHub-Project_Board-blue?logo=github&style=flat-square)](https://github.com/users/AbdelrahmanAbdeldaim/projects/1)
+
+* **Phase 1: Simulation Setup**
+* **Phase 2: Manual Control with Radio Controller**
+* **Phase 3: High-Level Autonomy Stack**
+* **Phase 4: Hardware Integration & Physical Flight**
+
+## Simulation Setup
+
+The simulation environment uses the following stack:
+
+* **NVIDIA Isaac Sim 5.1** provides the USD scene, rendering, sensors, and
+  physics simulation.
+* **Pegasus Simulator** adds multirotor vehicle models and connects Isaac Sim
+  to PX4.
+
+See the [simulation setup guide](simulation/README.md) for installation,
+environment configuration, and simulation usage.
