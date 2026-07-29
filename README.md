@@ -8,10 +8,15 @@ Prior to deploying on physical hardware, the strategy is to establish a simulati
 
 [![GitHub Project](https://img.shields.io/badge/GitHub-Project_Board-blue?logo=github&style=flat-square)](https://github.com/users/AbdelrahmanAbdeldaim/projects/1)
 
+An initial breakdown of the major phases; each will be expanded into
+finer-grained tasks on the project board as work progresses.
+
 * **Phase 1: Simulation Setup**
 * **Phase 2: Manual Control with Radio Controller**
-* **Phase 3: High-Level Autonomy Stack**
-* **Phase 4: Hardware Integration & Physical Flight**
+* **Phase 3: Mapping & Localization**
+* **Phase 4: Object Detection & Tracking**
+* **Phase 5: Moving Target Following**
+* **Phase 6: Hardware Integration & Physical Flight**
 
 ## Simulation Setup
 
