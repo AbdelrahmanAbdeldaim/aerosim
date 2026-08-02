@@ -1,0 +1,33 @@
+{
+  "name": "Drone Navstack (ROS 2 Jazzy)",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "dev",
+  "workspaceFolder": "/drone_ws",
+  "remoteUser": "dnav",
+  "shutdownAction": "stopCompose",
+  "postCreateCommand": "/drone_ws/.devcontainer/post-create.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cpptools-extension-pack",
+        "ranch-hand-robotics.rde-ros-2",
+        "ms-python.python",
+        "redhat.vscode-xml",
+        "redhat.vscode-yaml"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "cmake.configureOnOpen": false,
+        "files.associations": {
+          "*.repos": "yaml",
+          "*.launch.py": "python"
+        },
+        "search.exclude": {
+          "**/build": true,
+          "**/install": true,
+          "**/log": true
+        }
+      }
+    }
+  }
+}

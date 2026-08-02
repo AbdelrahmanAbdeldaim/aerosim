@@ -1,0 +1,44 @@
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        ROS_DISTRO: jazzy
+        USER_UID: "1000"
+        USER_GID: "1000"
+    image: drone-navstack-dev:jazzy
+    container_name: drone_ws_devcontainer
+    # PX4 SITL, Isaac Sim, and the Pegasus extension all run on the host. Host
+    # networking lets DDS discovery and the uXRCE-DDS agent see host processes;
+    # a bridged network would hide them.
+    network_mode: host
+    ipc: host
+    stdin_open: true
+    tty: true
+    init: true
+
+    environment:
+      DISPLAY: ${DISPLAY:-:0}
+      QT_X11_NO_MITSHM: "1"
+      NVIDIA_DRIVER_CAPABILITIES: all
+      ROS_DOMAIN_ID: "0"
+      ROS_AUTOMATIC_DISCOVERY_RANGE: "LOCALHOST"
+
+    volumes:
+      # This directory's parent is the colcon workspace, and it is the only part
+      # of the repository the container sees.
+      - ..:/drone_ws:cached
+      # RViz and rqt render through the host X server.
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+
+    # Drop this block if the machine has no NVIDIA GPU or container toolkit.
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+    command: sleep infinity
