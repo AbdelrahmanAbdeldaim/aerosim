@@ -22,9 +22,9 @@ finer-grained tasks on the project board as work progresses.
 
 The simulation environment uses the following stack:
 
-* **NVIDIA Isaac Sim 5.1** provides the USD scene, rendering, sensors, and
+* **NVIDIA Isaac Sim 6.0.1** provides the USD scene, rendering, sensors, and
   physics simulation.
-* **Pegasus Simulator** adds multirotor vehicle models and connects Isaac Sim
+* **My own fork of Pegasus Simulator** adds multirotor vehicle models and connects Isaac Sim
   to PX4.
 
 See the [simulation setup guide](simulation/README.md) for installation,

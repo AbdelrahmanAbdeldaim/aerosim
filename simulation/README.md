@@ -15,9 +15,9 @@ The Python distribution and import names are intentionally different:
 Complete the following steps in order. Each one links to the upstream guide;
 the notes summarize what to do and call out project-specific settings.
 
-1. [Install NVIDIA Isaac Sim 5.1](https://docs.isaacsim.omniverse.nvidia.com/5.1.0/installation/install_workstation.html) using NVIDIA's official workstation installation guide. Download and extract the Linux archive, run `./post_install.sh`, and verify the installation using `./isaac-sim.selector.sh`.
-2. [Configure the environment variables](https://pegasussimulator.github.io/PegasusSimulator/source/setup/installation.html#configuring-the-environment-variables). Add `ISAACSIM_PATH`, `ISAACSIM_PYTHON`, `ISAACSIM`, and the `isaac_run` function to your shell configuration, then open a new terminal.
-3. [Install Pegasus Simulator](https://pegasussimulator.github.io/PegasusSimulator/source/setup/installation.html#installing-the-pegasus-simulator). Clone Pegasus, register its `extensions/` directory in Isaac Sim, enable the extension, and install `pegasus.simulator` with Isaac Sim's Python interpreter.
+1. [Install NVIDIA Isaac Sim 6.0.1](https://docs.isaacsim.omniverse.nvidia.com/6.0.1/installation/quick-install.html) using NVIDIA's official workstation installation guide. Download and extract the Linux archive, run `./post_install.sh`, and verify the installation using `./isaac-sim.selector.sh`.
+2. [Configure the environment variables](https://github.com/AbdelrahmanAbdeldaim/PegasusSimulator#1-point-the-environment-at-your-existing-isaac-sim). Add `ISAACSIM_PATH`, `ISAACSIM_PYTHON`, `ISAACSIM`, and the `isaac_run` function to your shell configuration, then open a new terminal.
+3. [Install Pegasus Simulator](https://github.com/AbdelrahmanAbdeldaim/PegasusSimulator#2-clone-this-fork). Clone Pegasus, register its `extensions/` directory in Isaac Sim, enable the extension, and install `pegasus.simulator` with Isaac Sim's Python interpreter.
 4. Install PX4 Autopilot v1.17 for software-in-the-loop flight control (see below).
 5. Register the PX4 repository path with Pegasus (see below).
 
