@@ -2,9 +2,7 @@
 from drone_sim.scenarios import Scenario
 
 import carb
-import omni.graph.core as og
 import omni.timeline
-from omni.isaac.core.world import World
 
 from isaacsim.core.utils.extensions import enable_extension
 enable_extension("isaacsim.ros2.bridge")
@@ -38,8 +36,7 @@ class EmptySceneWithWalls(Scenario):
 
         # Acquire the World, .i.e, the singleton that controls that is a one stop shop for setting up physics,
         # spawning asset primitives, etc.
-        self.pg._world = World(**self.pg._world_settings)
-        self.world = self.pg.world
+        self.pg.initialize_world()
 
         # Launch one of the worlds provided by NVIDIA
         self.pg.load_environment(SIMULATION_ENVIRONMENTS["Box Room"])
@@ -89,8 +86,6 @@ class EmptySceneWithWalls(Scenario):
         # TODO: This is a very manual way of publishing the static transform between the drone base_link and the camera. I should implement a more generic way of doing this in the ROS2 backend.
         publish_static_tf(ros2_bridge_backend.node, ros2_bridge_backend.tf_static_broadcaster, "drone_base_link", "camera_01", np.array([0.14985, 0.0, -0.02963]), np.array([0.0, 0.0, 180.0]))
 
-        self.world.reset()
-
     def run(self, simulation_app):
         """
         Method that implements the application main loop, where the physics steps are executed.
@@ -103,7 +98,7 @@ class EmptySceneWithWalls(Scenario):
         while simulation_app.is_running():
 
             # Update the UI of the app and perform the physics step
-            self.world.step(render=True)
+            simulation_app.update()
 
         # Cleanup and stop
         carb.log_warn("EmptySceneWithWalls scenario is closing.")
